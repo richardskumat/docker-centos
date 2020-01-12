@@ -49,4 +49,13 @@ test_docker_images:
   only:
    - master
   script:
-    - echo hi
+    # dockerhub
+    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest cat /etc/os-release
+    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7 cat /etc/os-release
+    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7-systemd-enabled systemd --version
+    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7-molecule lsb_release -a
+    # gitlab
+    - docker run --rm $CI_REGISTRY_IMAGE:latest cat /etc/os-release
+    - docker run --rm $CI_REGISTRY_IMAGE:7 cat /etc/os-release
+    - docker run --rm $CI_REGISTRY_IMAGE:7-systemd-enabled systemd --version
+    - docker run --rm $CI_REGISTRY_IMAGE:7-molecule lsb_release -a
