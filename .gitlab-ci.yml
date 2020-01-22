@@ -20,7 +20,6 @@ build:
   script:
     # https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
     - docker build -f Dockerfile-C7 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest -t $CI_REGISTRY_IMAGE:7 -t $CI_REGISTRY_IMAGE:latest .
-    - docker build -f Dockerfile-C7-systemd-enabled -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7-systemd-enabled -t $CI_REGISTRY_IMAGE:7-systemd-enabled .
     - docker build -f Dockerfile-C7-molecule -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7-molecule -t $CI_REGISTRY_IMAGE:7-molecule .
     - docker images
 
@@ -31,17 +30,14 @@ push_to_dockerhub:
  script:
    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USER" --password-stdin
    - docker build -f Dockerfile-C7 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest -t $CI_REGISTRY_IMAGE:7 -t $CI_REGISTRY_IMAGE:latest .
-   - docker build -f Dockerfile-C7-systemd-enabled -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7-systemd-enabled -t $CI_REGISTRY_IMAGE:7-systemd-enabled .
    - docker build -f Dockerfile-C7-molecule -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7-molecule -t $CI_REGISTRY_IMAGE:7-molecule .
    - docker images
    - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest
    - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7
-   - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7-systemd-enabled
    - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7-molecule
    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
    - docker push $CI_REGISTRY_IMAGE:latest
    - docker push $CI_REGISTRY_IMAGE:7
-   - docker push $CI_REGISTRY_IMAGE:7-systemd-enabled
    - docker push $CI_REGISTRY_IMAGE:7-molecule
 
 test_docker_images:
@@ -52,10 +48,8 @@ test_docker_images:
     # dockerhub
     - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest cat /etc/os-release
     - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7 cat /etc/os-release
-    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7-systemd-enabled systemctl --version
     - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:7-molecule lsb_release -a
     # gitlab
     - docker run --rm $CI_REGISTRY_IMAGE:latest cat /etc/os-release
     - docker run --rm $CI_REGISTRY_IMAGE:7 cat /etc/os-release
-    - docker run --rm $CI_REGISTRY_IMAGE:7-systemd-enabled systemctl --version
     - docker run --rm $CI_REGISTRY_IMAGE:7-molecule lsb_release -a
