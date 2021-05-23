@@ -22,10 +22,6 @@ Github
 
 https://github.com/richardskumat/docker-centos
 
-Travis
-
-https://travis-ci.org/richardskumat/docker-centos
-
 Dockerhub
 
 https://hub.docker.com/r/qwe1/docker-centos
