@@ -2,11 +2,7 @@
 
 [![pipeline status](https://gitlab.com/richardskumat/docker-centos/badges/master/pipeline.svg)](https://gitlab.com/richardskumat/docker-centos/commits/master)
 
-My own CentOS images I use with molecule to test my
-own ansible roles.
-
-This image is based on the official [Centos images](https://hub.docker.com/_/centos)
-on Dockerhub.
+I plan on using (https://gitlab.com/richardskumat/docker-el) instead of this repo.
 
 ## Links to source code and build logs
 
